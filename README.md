@@ -58,7 +58,7 @@ Read more about the [default credentials provider chain](https://docs.aws.amazon
 
 While using the `awsvpc` network mode, a task ENI is created for each task launched on an instance. For most instances, there is a relatively low limit on the number of ENIs that can be attached to that particular instance. To allow more `awsvpc` network mode tasks to be launched on one particular instance, this environment variable can be enabled.
 
-This will prompt ECS to attach a "trunk" ENI to the instance allowing for more task ENIs, thus allowing for more tasks.
+This will prompt ECS to attach a "trunk" ENI to the instance allowing for more task ENIs, thus allowing for more tasks. There is additional setup required to get high density ENIs working which can be seen [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container-instance-eni.html).
 
 Read more about [ECS task networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html).
 
