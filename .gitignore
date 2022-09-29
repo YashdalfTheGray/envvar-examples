@@ -1,6 +1,7 @@
 ### Project specific ###
 .cdk.staging
 cdk.out
+cdk.context.json
 dist/*
 
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
