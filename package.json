@@ -33,6 +33,9 @@
     "ts-node": "^10.9.1"
   },
   "lint-staged": {
-    "**/*": "eslint --fix . && prettier --write --ignore-unknown"
+    "**/*": [
+      "eslint --fix .",
+      "prettier --write --ignore-unknown"
+    ]
   }
 }
