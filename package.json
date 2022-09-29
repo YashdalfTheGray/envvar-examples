@@ -1,0 +1,38 @@
+{
+  "name": "envvar-examples",
+  "version": "1.0.0",
+  "description": "a package with CDK constructs that help explain env vars",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsc",
+    "prepare": "husky install",
+    "linter": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YashdalfTheGray/envvar-examples.git"
+  },
+  "author": "Yash Kulshrestha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YashdalfTheGray/envvar-examples/issues"
+  },
+  "homepage": "https://github.com/YashdalfTheGray/envvar-examples#readme",
+  "dependencies": {
+    "aws-cdk-lib": "^2.43.1",
+    "constructs": "^10.1.116",
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
+    "eslint": "^8.24.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1",
+    "ts-node": "^10.9.1"
+  },
+  "lint-staged": {
+    "**/*": "eslint --fix . && prettier --write --ignore-unknown"
+  }
+}
