@@ -11,6 +11,7 @@ import {
 
 import * as customUserData from './customUserData';
 import EcsContainerInstanceWithDefaults from './EcsContainerInstanceWithDefaults';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 const {
   DOCKER_AUTH_REGISTRY_URI,
@@ -36,6 +37,12 @@ export default class EcsClusterStack extends Stack {
 
     securityGroup.addIngressRule(Peer.ipv4('0.0.0.0/0'), Port.tcp(80));
     securityGroup.addIngressRule(Peer.ipv4('0.0.0.0/0'), Port.tcp(22));
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const logGroup = new LogGroup(this, 'EnvvarExamplesInstanceLogsGroup', {
+      logGroupName: 'envvar-examples-instance-logs',
+      retention: RetentionDays.ONE_MONTH,
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const standardInstance = new EcsContainerInstanceWithDefaults(
