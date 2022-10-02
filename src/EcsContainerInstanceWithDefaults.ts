@@ -14,11 +14,14 @@ import {
 } from 'aws-cdk-lib/aws-ecs';
 import { Role } from 'aws-cdk-lib/aws-iam';
 
+import buildCloudWatchCfnInitConfig from './CloudwatchAgentCfnInitConfig';
+
 export default class EcsContainerInstanceWithDefaults extends Instance {
   constructor(
     scope: Construct,
     id: string,
     ecsCluster: Cluster,
+    instanceLogGroupName: string,
     props: Partial<InstanceProps>
   ) {
     super(
@@ -45,6 +48,7 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
             `${props.instanceName || 'EcsContainer'}InstanceRole`,
             'ecsInstanceRole'
           ),
+          init: buildCloudWatchCfnInitConfig(instanceLogGroupName),
         },
         props
       )
