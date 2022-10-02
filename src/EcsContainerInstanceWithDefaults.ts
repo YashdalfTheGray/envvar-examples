@@ -24,7 +24,11 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
     super(
       scope,
       id,
-      Object.assign(
+      Object.assign<
+        Record<string, unknown>,
+        InstanceProps,
+        Partial<InstanceProps>
+      >(
         {},
         {
           keyName: 'ssh-access',
