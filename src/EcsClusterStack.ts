@@ -49,13 +49,11 @@ export default class EcsClusterStack extends Stack {
       this,
       'EnvvarExamplesStandardInstance',
       testCluster,
+      logGroup.logGroupName,
       {
         securityGroup: securityGroup,
         instanceName: 'EnvvarStandardInstance',
-        userData: customUserData.standardUserData(
-          testCluster.clusterName,
-          logGroup.logGroupName
-        ),
+        userData: customUserData.standardUserData(testCluster.clusterName),
       }
     );
 
@@ -64,20 +62,17 @@ export default class EcsClusterStack extends Stack {
       this,
       'EnvvarExamplesDockerAuthInstance',
       testCluster,
+      logGroup.logGroupName,
       {
         securityGroup: securityGroup,
         instanceName: 'EnvvarDockerAuthInstance',
-        userData: customUserData.dockerAuthUserData(
-          testCluster.clusterName,
-          logGroup.logGroupName,
-          {
-            [DOCKER_AUTH_REGISTRY_URI!]: {
-              username: DOCKER_AUTH_REGISTRY_USERNAME!,
-              password: DOCKER_AUTH_REGISTRY_PASSWORD!,
-              email: DOCKER_AUTH_REGISTRY_EMAIL!,
-            },
-          }
-        ),
+        userData: customUserData.dockerAuthUserData(testCluster.clusterName, {
+          [DOCKER_AUTH_REGISTRY_URI!]: {
+            username: DOCKER_AUTH_REGISTRY_USERNAME!,
+            password: DOCKER_AUTH_REGISTRY_PASSWORD!,
+            email: DOCKER_AUTH_REGISTRY_EMAIL!,
+          },
+        }),
       }
     );
 
@@ -86,19 +81,16 @@ export default class EcsClusterStack extends Stack {
       this,
       'EnvvarExamplesCredsInstance',
       testCluster,
+      logGroup.logGroupName,
       {
         securityGroup: securityGroup,
         instanceName: 'EnvvarCredsInstance',
         role: undefined,
-        userData: customUserData.awsCredsUserData(
-          testCluster.clusterName,
-          logGroup.logGroupName,
-          {
-            accessKeyId: AWS_ACCESS_KEY_ID!,
-            secretAccessKey: AWS_SECRET_ACCESS_KEY!,
-            sessionToken: AWS_SESSION_TOKEN!,
-          }
-        ),
+        userData: customUserData.awsCredsUserData(testCluster.clusterName, {
+          accessKeyId: AWS_ACCESS_KEY_ID!,
+          secretAccessKey: AWS_SECRET_ACCESS_KEY!,
+          sessionToken: AWS_SESSION_TOKEN!,
+        }),
       }
     );
 
@@ -107,13 +99,13 @@ export default class EcsClusterStack extends Stack {
       this,
       'EnvvarExamplesEniTrunkInstance',
       testCluster,
+      logGroup.logGroupName,
       {
         securityGroup: securityGroup,
         instanceName: 'EnvvarEniTrunkInstance',
         instanceType: InstanceType.of(InstanceClass.M5, InstanceSize.LARGE),
         userData: customUserData.highDensityEniUserData(
-          testCluster.clusterName,
-          logGroup.logGroupName
+          testCluster.clusterName
         ),
       }
     );
