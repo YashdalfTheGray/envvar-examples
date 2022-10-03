@@ -1,5 +1,6 @@
 import {
   CloudFormationInit,
+  InitCommand,
   InitConfig,
   InitFile,
   InitPackage,
@@ -8,16 +9,24 @@ import {
 export default function buildCloudWatchCfnInitConfig(logGroupName: string) {
   return CloudFormationInit.fromConfigSets({
     configSets: {
-      default: ['installCwAgent', 'putCwConfig'],
+      default: ['installCwAgent', 'putCwConfig', 'restartCwAgent'],
     },
     configs: {
       installCwAgent: new InitConfig([
         InitPackage.yum('amazon-cloudwatch-agent'),
       ]),
       putCwConfig: new InitConfig([
-        InitFile.fromString(
+        InitFile.fromObject(
           '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json',
           getCwAgentConfigForLogGroup(logGroupName)
+        ),
+      ]),
+      restartCwAgent: new InitConfig([
+        InitCommand.shellCommand(
+          'sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a stop'
+        ),
+        InitCommand.shellCommand(
+          'sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s'
         ),
       ]),
     },
