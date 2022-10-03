@@ -1,4 +1,5 @@
 import { Construct } from 'constructs';
+import { Duration } from 'aws-cdk-lib';
 import {
   Instance,
   InstanceClass,
@@ -49,6 +50,13 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
             'ecsInstanceRole'
           ),
           init: buildCloudWatchCfnInitConfig(instanceLogGroupName),
+          initOptions: {
+            configSets: ['default'],
+            includeUrl: true,
+            includeRole: true,
+            timeout: Duration.minutes(10),
+            printLog: true,
+          },
         },
         props
       )
