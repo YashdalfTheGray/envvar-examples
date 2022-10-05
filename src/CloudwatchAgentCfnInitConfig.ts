@@ -20,6 +20,7 @@ export default function buildCloudWatchCfnInitConfig(logGroupName: string) {
     configs: {
       installCwAgent: new InitConfig([
         InitPackage.yum('amazon-cloudwatch-agent'),
+        InitPackage.yum('aws-cfn-bootstrap'),
       ]),
       putCwConfig: new InitConfig([
         InitFile.fromObject(
