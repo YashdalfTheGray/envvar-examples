@@ -63,8 +63,9 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
       )
     );
 
-    const cfnInstance = this.node.defaultChild as CfnInstance;
-    cfnInstance.cfnOptions.creationPolicy = {
+    // this is the escape hatch syntax to get access to the CFN construct
+    // https://docs.aws.amazon.com/cdk/v2/guide/cfn_layer.html
+    (this.node.defaultChild as CfnInstance).cfnOptions.creationPolicy = {
       resourceSignal: {
         count: 1,
         timeout: 'PT10M',
