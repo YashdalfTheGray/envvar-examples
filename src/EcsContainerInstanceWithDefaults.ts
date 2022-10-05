@@ -1,6 +1,7 @@
 import { Construct } from 'constructs';
 import { Duration } from 'aws-cdk-lib';
 import {
+  CfnInstance,
   Instance,
   InstanceClass,
   InstanceProps,
@@ -61,5 +62,13 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
         props
       )
     );
+
+    const cfnInstance = this.node.defaultChild as CfnInstance;
+    cfnInstance.cfnOptions.creationPolicy = {
+      resourceSignal: {
+        count: 1,
+        timeout: 'PT10M',
+      },
+    };
   }
 }
