@@ -1,3 +1,4 @@
+import { Fn } from 'aws-cdk-lib/core';
 import {
   CloudFormationInit,
   InitCommand,
@@ -9,7 +10,12 @@ import {
 export default function buildCloudWatchCfnInitConfig(logGroupName: string) {
   return CloudFormationInit.fromConfigSets({
     configSets: {
-      default: ['installCwAgent', 'putCwConfig', 'restartCwAgent'],
+      default: [
+        'installCwAgent',
+        'putCwConfig',
+        'restartCwAgent',
+        'signalCreateComplete',
+      ],
     },
     configs: {
       installCwAgent: new InitConfig([
@@ -27,6 +33,13 @@ export default function buildCloudWatchCfnInitConfig(logGroupName: string) {
         ),
         InitCommand.shellCommand(
           'sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s'
+        ),
+      ]),
+      signalCreateComplete: new InitConfig([
+        InitCommand.shellCommand(
+          Fn.sub(
+            '/opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackId} --resource TestInstance --region ${AWS::Region}'
+          )
         ),
       ]),
     },
