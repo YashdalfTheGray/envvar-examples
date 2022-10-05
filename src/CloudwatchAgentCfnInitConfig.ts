@@ -7,7 +7,10 @@ import {
   InitPackage,
 } from 'aws-cdk-lib/aws-ec2';
 
-export default function buildCloudWatchCfnInitConfig(logGroupName: string) {
+export default function buildCloudWatchCfnInitConfig(
+  instanceName: string,
+  logGroupName: string
+) {
   return CloudFormationInit.fromConfigSets({
     configSets: {
       default: [
@@ -39,7 +42,10 @@ export default function buildCloudWatchCfnInitConfig(logGroupName: string) {
       signalCreateComplete: new InitConfig([
         InitCommand.shellCommand(
           Fn.sub(
-            '/opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackId} --resource TestInstance --region ${AWS::Region}'
+            '/opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackId} --resource ${instanceName} --region ${AWS::Region}',
+            {
+              instanceName,
+            }
           )
         ),
       ]),

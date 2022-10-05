@@ -50,7 +50,7 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
             `${props.instanceName || 'EcsContainer'}InstanceRole`,
             'ecsInstanceRole'
           ),
-          init: buildCloudWatchCfnInitConfig(instanceLogGroupName),
+          init: buildCloudWatchCfnInitConfig(id, instanceLogGroupName),
           initOptions: {
             configSets: ['default'],
             includeUrl: true,
