@@ -1,4 +1,4 @@
-import { Fn } from 'aws-cdk-lib/core';
+import { Fn } from 'aws-cdk-lib';
 import {
   CloudFormationInit,
   InitCommand,
