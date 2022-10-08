@@ -36,9 +36,7 @@ export default function buildCloudWatchCfnInitConfig(
       signalCreateComplete: new InitConfig([
         InitCommand.shellCommand(
           Fn.sub(
-            '/opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackId} --resource ' +
-              instanceName +
-              ' --region ${AWS::Region}',
+            '/opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackId} --resource ${instanceName} --region ${AWS::Region}',
             {
               instanceName,
             }
