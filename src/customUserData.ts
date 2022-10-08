@@ -37,11 +37,16 @@ export function standardUserData(
 
 export function dockerAuthUserData(
   clusterName: string,
+  instanceName: string,
   registries: Registries
 ): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
+    Fn.sub(
+      '/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource ${instanceName} --configsets cloudwatchAgentSetup --region ${AWS::Region}',
+      { instanceName }
+    ),
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_ENGINE_AUTH_TYPE=docker',
@@ -55,11 +60,16 @@ export function dockerAuthUserData(
 
 export function awsCredsUserData(
   clusterName: string,
+  instanceName: string,
   creds: Credentials
 ): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
+    Fn.sub(
+      '/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource ${instanceName} --configsets cloudwatchAgentSetup --region ${AWS::Region}',
+      { instanceName }
+    ),
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     `AWS_ACCESS_KEY_ID=${creds.accessKeyId}`,
@@ -72,10 +82,17 @@ export function awsCredsUserData(
   return userData;
 }
 
-export function highDensityEniUserData(clusterName: string): UserData {
+export function highDensityEniUserData(
+  clusterName: string,
+  instanceName: string
+): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
+    Fn.sub(
+      '/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource ${instanceName} --configsets cloudwatchAgentSetup --region ${AWS::Region}',
+      { instanceName }
+    ),
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_ENABLE_HIGH_DENSITY_ENI=true',
