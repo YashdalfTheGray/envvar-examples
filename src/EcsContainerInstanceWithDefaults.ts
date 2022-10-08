@@ -1,5 +1,4 @@
 import { Construct } from 'constructs';
-import { Duration } from 'aws-cdk-lib';
 import {
   CfnInstance,
   Instance,
@@ -26,6 +25,8 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
     instanceLogGroupName: string,
     props: Partial<InstanceProps>
   ) {
+    const logicalIdOverride = `EnvvarExamples${id}`;
+
     super(
       scope,
       id,
@@ -50,12 +51,14 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
             `${props.instanceName || 'EcsContainer'}InstanceRole`,
             'ecsInstanceRole'
           ),
-          init: buildCloudWatchCfnInitConfig(id, instanceLogGroupName),
+          init: buildCloudWatchCfnInitConfig(
+            logicalIdOverride,
+            instanceLogGroupName
+          ),
           initOptions: {
             configSets: ['default'],
             includeUrl: true,
             includeRole: true,
-            timeout: Duration.minutes(10),
             printLog: true,
           },
         },
@@ -68,8 +71,9 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
     (this.node.defaultChild as CfnInstance).cfnOptions.creationPolicy = {
       resourceSignal: {
         count: 1,
-        timeout: 'PT10M',
+        timeout: 'PT5M',
       },
     };
+    this.instance.overrideLogicalId(logicalIdOverride);
   }
 }
