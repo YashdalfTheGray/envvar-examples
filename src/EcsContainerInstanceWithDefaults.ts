@@ -25,8 +25,6 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
     instanceLogGroupName: string,
     props: Partial<InstanceProps>
   ) {
-    const logicalIdOverride = `EnvvarExamples${id}`;
-
     super(
       scope,
       id,
@@ -51,10 +49,7 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
             `${props.instanceName || 'EcsContainer'}InstanceRole`,
             'ecsInstanceRole'
           ),
-          init: buildCloudWatchCfnInitConfig(
-            logicalIdOverride,
-            instanceLogGroupName
-          ),
+          init: buildCloudWatchCfnInitConfig(id, instanceLogGroupName),
           initOptions: {
             configSets: ['default'],
             includeUrl: true,
@@ -74,6 +69,8 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
         timeout: 'PT5M',
       },
     };
-    this.instance.overrideLogicalId(logicalIdOverride);
+    // don't let CDK append a random string at the end because then cfn-signal
+    // doesn't work
+    this.instance.overrideLogicalId(id);
   }
 }
