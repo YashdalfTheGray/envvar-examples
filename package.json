@@ -39,7 +39,7 @@
   },
   "lint-staged": {
     "**/*": [
-      "eslint --fix .",
+      "eslint --fix --cache",
       "prettier --write --ignore-unknown"
     ]
   }
