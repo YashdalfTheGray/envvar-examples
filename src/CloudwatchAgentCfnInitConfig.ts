@@ -4,7 +4,6 @@ import {
   InitCommand,
   InitConfig,
   InitFile,
-  InitPackage,
 } from 'aws-cdk-lib/aws-ec2';
 
 export default function buildCloudWatchCfnInitConfig(
@@ -13,18 +12,13 @@ export default function buildCloudWatchCfnInitConfig(
 ) {
   return CloudFormationInit.fromConfigSets({
     configSets: {
-      default: [
-        'installCwAgent',
-        'putCwConfig',
-        'restartCwAgent',
-        'signalCreateComplete',
-      ],
+      default: ['putCwConfig', 'restartCwAgent', 'signalCreateComplete'],
     },
     configs: {
-      installCwAgent: new InitConfig([
-        InitPackage.yum('amazon-cloudwatch-agent'),
-        InitPackage.yum('aws-cfn-bootstrap'),
-      ]),
+      // amazon-cloudwatch-agent is already installed on ECS optimized AMIs
+      // installCwAgent: new InitConfig([
+      //   InitPackage.yum('amazon-cloudwatch-agent'),
+      // ]),
       putCwConfig: new InitConfig([
         InitFile.fromObject(
           '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json',
@@ -42,7 +36,9 @@ export default function buildCloudWatchCfnInitConfig(
       signalCreateComplete: new InitConfig([
         InitCommand.shellCommand(
           Fn.sub(
-            '/opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackId} --resource ${instanceName} --region ${AWS::Region}',
+            '/opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackId} --resource ' +
+              instanceName +
+              ' --region ${AWS::Region}',
             {
               instanceName,
             }
