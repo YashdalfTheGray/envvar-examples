@@ -12,7 +12,11 @@ export default function buildCloudWatchCfnInitConfig(
 ) {
   return CloudFormationInit.fromConfigSets({
     configSets: {
-      default: ['putCwConfig', 'restartCwAgent', 'signalCreateComplete'],
+      cloudwatchAgentSetup: [
+        'putCwConfig',
+        'restartCwAgent',
+        'signalCreateComplete',
+      ],
     },
     configs: {
       // amazon-cloudwatch-agent is already installed on ECS optimized AMIs
