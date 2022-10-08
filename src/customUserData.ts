@@ -1,3 +1,4 @@
+import { Fn } from 'aws-cdk-lib';
 import { UserData } from 'aws-cdk-lib/aws-ec2';
 
 export type Registries = {
@@ -14,10 +15,17 @@ export type Credentials = {
   sessionToken: string;
 };
 
-export function standardUserData(clusterName: string): UserData {
+export function standardUserData(
+  clusterName: string,
+  instanceName: string
+): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
+    Fn.sub(
+      '/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource ${instanceName} --configsets cloudwatchAgentSetup --region ${AWS::Region}',
+      { instanceName }
+    ),
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_LOGLEVEL=debug',

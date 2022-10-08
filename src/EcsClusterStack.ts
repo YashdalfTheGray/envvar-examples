@@ -53,7 +53,10 @@ export default class EcsClusterStack extends Stack {
       {
         securityGroup: securityGroup,
         instanceName: 'EnvvarStandardInstance',
-        userData: customUserData.standardUserData(testCluster.clusterName),
+        userData: customUserData.standardUserData(
+          testCluster.clusterName,
+          'EnvvarExamplesStandardInstance'
+        ),
       }
     );
 
