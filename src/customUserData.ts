@@ -1,4 +1,4 @@
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import { UserData } from 'aws-cdk-lib/aws-ec2';
 
 export type Registries = {
   [key: string]: {
@@ -14,8 +14,8 @@ export type Credentials = {
   sessionToken: string;
 };
 
-export function standardUserData(clusterName: string): ec2.UserData {
-  const userData = ec2.UserData.forLinux();
+export function standardUserData(clusterName: string): UserData {
+  const userData = UserData.forLinux();
 
   userData.addCommands(
     "cat <<'EOF' >> /etc/ecs/ecs.config",
@@ -30,8 +30,8 @@ export function standardUserData(clusterName: string): ec2.UserData {
 export function dockerAuthUserData(
   clusterName: string,
   registries: Registries
-): ec2.UserData {
-  const userData = ec2.UserData.forLinux();
+): UserData {
+  const userData = UserData.forLinux();
 
   userData.addCommands(
     "cat <<'EOF' >> /etc/ecs/ecs.config",
@@ -48,8 +48,8 @@ export function dockerAuthUserData(
 export function awsCredsUserData(
   clusterName: string,
   creds: Credentials
-): ec2.UserData {
-  const userData = ec2.UserData.forLinux();
+): UserData {
+  const userData = UserData.forLinux();
 
   userData.addCommands(
     "cat <<'EOF' >> /etc/ecs/ecs.config",
@@ -64,8 +64,8 @@ export function awsCredsUserData(
   return userData;
 }
 
-export function highDensityEniUserData(clusterName: string): ec2.UserData {
-  const userData = ec2.UserData.forLinux();
+export function highDensityEniUserData(clusterName: string): UserData {
+  const userData = UserData.forLinux();
 
   userData.addCommands(
     "cat <<'EOF' >> /etc/ecs/ecs.config",
