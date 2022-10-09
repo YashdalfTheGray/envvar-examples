@@ -1,4 +1,4 @@
-import { Fn } from 'aws-cdk-lib';
+// import { Fn } from 'aws-cdk-lib';
 import {
   CloudFormationInit,
   InitCommand,
@@ -7,7 +7,7 @@ import {
 } from 'aws-cdk-lib/aws-ec2';
 
 export default function buildCloudWatchCfnInitConfig(
-  instanceName: string,
+  _instanceName: string,
   logGroupName: string
 ) {
   return CloudFormationInit.fromConfigSets({
@@ -37,16 +37,17 @@ export default function buildCloudWatchCfnInitConfig(
           'sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s'
         ),
       ]),
-      signalCreateComplete: new InitConfig([
-        InitCommand.shellCommand(
-          Fn.sub(
-            '/opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackId} --resource ${instanceName} --region ${AWS::Region}',
-            {
-              instanceName,
-            }
-          )
-        ),
-      ]),
+      // we also don't need this because cdk inlines this into the userdata
+      // signalCreateComplete: new InitConfig([
+      //   InitCommand.shellCommand(
+      //     Fn.sub(
+      //       '/opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackId} --resource ${instanceName} --region ${AWS::Region}',
+      //       {
+      //         instanceName,
+      //       }
+      //     )
+      //   ),
+      // ]),
     },
   });
 }
