@@ -1,4 +1,5 @@
 import { Construct } from 'constructs';
+import { Duration } from 'aws-cdk-lib';
 import {
   CfnInstance,
   Instance,
@@ -51,7 +52,9 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
           ),
           init: buildCloudWatchCfnInitConfig(id, instanceLogGroupName),
           initOptions: {
-            configSets: ['default'],
+            configSets: ['cloudwatchAgentSetup'],
+            timeout: Duration.minutes(10),
+            ignoreFailures: true,
             includeUrl: true,
             includeRole: true,
             printLog: true,
@@ -66,7 +69,7 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
     (this.node.defaultChild as CfnInstance).cfnOptions.creationPolicy = {
       resourceSignal: {
         count: 1,
-        timeout: 'PT5M',
+        timeout: 'PT10M',
       },
     };
   }
