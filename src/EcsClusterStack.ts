@@ -53,10 +53,7 @@ export default class EcsClusterStack extends Stack {
       {
         securityGroup: securityGroup,
         instanceName: 'EnvvarStandardInstance',
-        userData: customUserData.standardUserData(
-          testCluster.clusterName,
-          'EnvvarExamplesStandardInstance'
-        ),
+        userData: customUserData.standardUserData(testCluster.clusterName),
       }
     );
 
@@ -69,17 +66,13 @@ export default class EcsClusterStack extends Stack {
       {
         securityGroup: securityGroup,
         instanceName: 'EnvvarDockerAuthInstance',
-        userData: customUserData.dockerAuthUserData(
-          testCluster.clusterName,
-          'EnvvarExamplesDockerAuthInstance',
-          {
-            [DOCKER_AUTH_REGISTRY_URI!]: {
-              username: DOCKER_AUTH_REGISTRY_USERNAME!,
-              password: DOCKER_AUTH_REGISTRY_PASSWORD!,
-              email: DOCKER_AUTH_REGISTRY_EMAIL!,
-            },
-          }
-        ),
+        userData: customUserData.dockerAuthUserData(testCluster.clusterName, {
+          [DOCKER_AUTH_REGISTRY_URI!]: {
+            username: DOCKER_AUTH_REGISTRY_USERNAME!,
+            password: DOCKER_AUTH_REGISTRY_PASSWORD!,
+            email: DOCKER_AUTH_REGISTRY_EMAIL!,
+          },
+        }),
       }
     );
 
@@ -93,15 +86,11 @@ export default class EcsClusterStack extends Stack {
         securityGroup: securityGroup,
         instanceName: 'EnvvarCredsInstance',
         role: undefined,
-        userData: customUserData.awsCredsUserData(
-          testCluster.clusterName,
-          'EnvvarExamplesCredsInstance',
-          {
-            accessKeyId: AWS_ACCESS_KEY_ID!,
-            secretAccessKey: AWS_SECRET_ACCESS_KEY!,
-            sessionToken: AWS_SESSION_TOKEN!,
-          }
-        ),
+        userData: customUserData.awsCredsUserData(testCluster.clusterName, {
+          accessKeyId: AWS_ACCESS_KEY_ID!,
+          secretAccessKey: AWS_SECRET_ACCESS_KEY!,
+          sessionToken: AWS_SESSION_TOKEN!,
+        }),
       }
     );
 
@@ -116,8 +105,7 @@ export default class EcsClusterStack extends Stack {
         instanceName: 'EnvvarEniTrunkInstance',
         instanceType: InstanceType.of(InstanceClass.M5, InstanceSize.LARGE),
         userData: customUserData.highDensityEniUserData(
-          testCluster.clusterName,
-          'EnvvarExamplesEniTrunkInstance'
+          testCluster.clusterName
         ),
       }
     );

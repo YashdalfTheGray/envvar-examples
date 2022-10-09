@@ -1,4 +1,3 @@
-import { Fn } from 'aws-cdk-lib';
 import { UserData } from 'aws-cdk-lib/aws-ec2';
 
 export type Registries = {
@@ -15,17 +14,10 @@ export type Credentials = {
   sessionToken: string;
 };
 
-export function standardUserData(
-  clusterName: string,
-  instanceName: string
-): UserData {
+export function standardUserData(clusterName: string): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
-    Fn.sub(
-      '/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource ${instanceName} --configsets cloudwatchAgentSetup --region ${AWS::Region}',
-      { instanceName }
-    ),
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_LOGLEVEL=debug',
@@ -37,16 +29,11 @@ export function standardUserData(
 
 export function dockerAuthUserData(
   clusterName: string,
-  instanceName: string,
   registries: Registries
 ): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
-    Fn.sub(
-      '/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource ${instanceName} --configsets cloudwatchAgentSetup --region ${AWS::Region}',
-      { instanceName }
-    ),
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_ENGINE_AUTH_TYPE=docker',
@@ -60,16 +47,11 @@ export function dockerAuthUserData(
 
 export function awsCredsUserData(
   clusterName: string,
-  instanceName: string,
   creds: Credentials
 ): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
-    Fn.sub(
-      '/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource ${instanceName} --configsets cloudwatchAgentSetup --region ${AWS::Region}',
-      { instanceName }
-    ),
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     `AWS_ACCESS_KEY_ID=${creds.accessKeyId}`,
@@ -82,17 +64,10 @@ export function awsCredsUserData(
   return userData;
 }
 
-export function highDensityEniUserData(
-  clusterName: string,
-  instanceName: string
-): UserData {
+export function highDensityEniUserData(clusterName: string): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
-    Fn.sub(
-      '/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource ${instanceName} --configsets cloudwatchAgentSetup --region ${AWS::Region}',
-      { instanceName }
-    ),
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_ENABLE_HIGH_DENSITY_ENI=true',
