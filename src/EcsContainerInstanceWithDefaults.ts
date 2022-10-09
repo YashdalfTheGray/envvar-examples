@@ -69,8 +69,5 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
         timeout: 'PT5M',
       },
     };
-    // don't let CDK append a random string at the end because then cfn-signal
-    // doesn't work
-    this.instance.overrideLogicalId(id);
   }
 }
