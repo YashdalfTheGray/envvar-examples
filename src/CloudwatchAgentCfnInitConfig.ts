@@ -14,12 +14,15 @@ export default function buildCloudWatchCfnInitConfig(
     configSets: {
       cloudwatchAgentSetup: [
         'putCwConfig',
+        'stopCwAgent',
+        'setDebugLogLevel',
         'restartCwAgent',
-        'signalCreateComplete',
       ],
     },
     configs: {
       // amazon-cloudwatch-agent is already installed on ECS optimized AMIs
+      // but in the userdata we'll fetch the latest cloudwatch agent
+      // version anyway
       // installCwAgent: new InitConfig([
       //   InitPackage.yum('amazon-cloudwatch-agent'),
       // ]),
@@ -28,11 +31,23 @@ export default function buildCloudWatchCfnInitConfig(
           '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json',
           getCwAgentConfigForLogGroup(logGroupName)
         ),
+        // put this file somewhere else too because cloudwatch agent just deletes it
+        InitFile.fromObject(
+          '/tmp/amazon-cloudwatch-agent.json',
+          getCwAgentConfigForLogGroup(logGroupName)
+        ),
       ]),
-      restartCwAgent: new InitConfig([
+      stopCwAgent: new InitConfig([
         InitCommand.shellCommand(
           'sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a stop'
         ),
+      ]),
+      setDebugLogLevel: new InitConfig([
+        InitCommand.shellCommand(
+          'sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a set-log-level -l DEBUG'
+        ),
+      ]),
+      restartCwAgent: new InitConfig([
         InitCommand.shellCommand(
           'sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s'
         ),
