@@ -18,6 +18,7 @@ export function standardUserData(clusterName: string): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
+    'sudo yum install -y aws-cfn-bootstrap',
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_LOGLEVEL=debug',
@@ -34,6 +35,7 @@ export function dockerAuthUserData(
   const userData = UserData.forLinux();
 
   userData.addCommands(
+    'sudo yum install -y aws-cfn-bootstrap',
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_ENGINE_AUTH_TYPE=docker',
@@ -52,6 +54,7 @@ export function awsCredsUserData(
   const userData = UserData.forLinux();
 
   userData.addCommands(
+    'sudo yum install -y aws-cfn-bootstrap',
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     `AWS_ACCESS_KEY_ID=${creds.accessKeyId}`,
@@ -68,6 +71,7 @@ export function highDensityEniUserData(clusterName: string): UserData {
   const userData = UserData.forLinux();
 
   userData.addCommands(
+    'sudo yum install -y aws-cfn-bootstrap',
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_ENABLE_HIGH_DENSITY_ENI=true',
