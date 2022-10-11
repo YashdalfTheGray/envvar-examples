@@ -54,9 +54,12 @@ export default function buildCloudWatchCfnInitConfig(
 
 function getCwAgentConfigForLogGroup(logGroupName: string) {
   return {
-    agent: {
-      debug: true,
-    },
+    // you would generally set the log level here but cfn-init turns
+    // this boolean into string, for some reason, so we'll set it
+    // elsewhere
+    // agent: {
+    //   debug: true,
+    // },
     logs: {
       logs_collected: {
         files: {
