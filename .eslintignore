@@ -5,6 +5,7 @@ package-lock.json
 tsconfig.json
 README.md
 cdk.json
+sample-cloudwatch-agent-config.json
 
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,intellij+all,linux,node,vim,windows
