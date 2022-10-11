@@ -19,6 +19,7 @@ export function standardUserData(clusterName: string): UserData {
 
   userData.addCommands(
     'sudo yum install -y aws-cfn-bootstrap',
+    'rpm -Uvh https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm',
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_LOGLEVEL=debug',
@@ -36,6 +37,7 @@ export function dockerAuthUserData(
 
   userData.addCommands(
     'sudo yum install -y aws-cfn-bootstrap',
+    'rpm -Uvh https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm',
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_ENGINE_AUTH_TYPE=docker',
@@ -55,6 +57,7 @@ export function awsCredsUserData(
 
   userData.addCommands(
     'sudo yum install -y aws-cfn-bootstrap',
+    'rpm -Uvh https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm',
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     `AWS_ACCESS_KEY_ID=${creds.accessKeyId}`,
@@ -72,6 +75,7 @@ export function highDensityEniUserData(clusterName: string): UserData {
 
   userData.addCommands(
     'sudo yum install -y aws-cfn-bootstrap',
+    'rpm -Uvh https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm',
     "cat <<'EOF' >> /etc/ecs/ecs.config",
     `ECS_CLUSTER=${clusterName}`,
     'ECS_ENABLE_HIGH_DENSITY_ENI=true',
