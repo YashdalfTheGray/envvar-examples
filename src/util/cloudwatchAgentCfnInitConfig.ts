@@ -5,10 +5,12 @@ import {
   InitConfig,
   InitFile,
 } from 'aws-cdk-lib/aws-ec2';
+import { IRole } from 'aws-cdk-lib/aws-iam';
 
 export function buildCloudWatchCfnInitConfig(
   _instanceName: string,
-  logGroupName: string
+  logGroupName: string,
+  cwAgentRole?: IRole
 ) {
   return CloudFormationInit.fromConfigSets({
     configSets: {
@@ -29,12 +31,12 @@ export function buildCloudWatchCfnInitConfig(
       putCwConfig: new InitConfig([
         InitFile.fromObject(
           '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json',
-          getCwAgentConfigForLogGroup(logGroupName)
+          getCwAgentConfigForLogGroup(logGroupName, cwAgentRole)
         ),
         // put this file somewhere else too because cloudwatch agent just deletes it
         InitFile.fromObject(
           '/tmp/amazon-cloudwatch-agent.json',
-          getCwAgentConfigForLogGroup(logGroupName)
+          getCwAgentConfigForLogGroup(logGroupName, cwAgentRole)
         ),
       ]),
       stopCwAgent: new InitConfig([
@@ -67,8 +69,11 @@ export function buildCloudWatchCfnInitConfig(
   });
 }
 
-function getCwAgentConfigForLogGroup(logGroupName: string) {
-  return {
+function getCwAgentConfigForLogGroup(
+  logGroupName: string,
+  cwAgentRole?: IRole
+) {
+  const base = {
     // you would generally set the log level here but cfn-init turns
     // this boolean into string, for some reason, so we'll set it
     // elsewhere
@@ -94,4 +99,17 @@ function getCwAgentConfigForLogGroup(logGroupName: string) {
       },
     },
   };
+
+  if (cwAgentRole) {
+    type BaseWithAgent = typeof base & {
+      agent: { credentials: { role_arn: string } };
+    };
+    (base as BaseWithAgent).agent = {
+      credentials: {
+        role_arn: cwAgentRole.roleArn,
+      },
+    };
+  }
+
+  return base;
 }

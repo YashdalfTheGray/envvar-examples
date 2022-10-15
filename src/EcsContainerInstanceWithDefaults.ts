@@ -14,9 +14,16 @@ import {
   Cluster,
   EcsOptimizedImage,
 } from 'aws-cdk-lib/aws-ecs';
-import { Role } from 'aws-cdk-lib/aws-iam';
+import { IRole, Role } from 'aws-cdk-lib/aws-iam';
 
 import { buildCloudWatchCfnInitConfig } from './util';
+
+export interface IContainerInstanceExtraProps {
+  cwAgentRole?: IRole;
+}
+
+export type EcsContainerInstanceWithDefaultsProps = Partial<InstanceProps> &
+  IContainerInstanceExtraProps;
 
 export default class EcsContainerInstanceWithDefaults extends Instance {
   constructor(
@@ -24,7 +31,7 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
     id: string,
     ecsCluster: Cluster,
     instanceLogGroupName: string,
-    props: Partial<InstanceProps>
+    props: EcsContainerInstanceWithDefaultsProps
   ) {
     super(
       scope,
@@ -50,7 +57,11 @@ export default class EcsContainerInstanceWithDefaults extends Instance {
             `${props.instanceName || 'EcsContainer'}InstanceRole`,
             'ecsInstanceRole'
           ),
-          init: buildCloudWatchCfnInitConfig(id, instanceLogGroupName),
+          init: buildCloudWatchCfnInitConfig(
+            id,
+            instanceLogGroupName,
+            props.cwAgentRole
+          ),
           initOptions: {
             configSets: ['cloudwatchAgentSetup'],
             timeout: Duration.minutes(10),
