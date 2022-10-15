@@ -9,7 +9,12 @@ import {
   SecurityGroup,
 } from 'aws-cdk-lib/aws-ec2';
 
-import * as customUserData from './customUserData';
+import {
+  standardUserData,
+  dockerAuthUserData,
+  awsCredsUserData,
+  highDensityEniUserData,
+} from './util';
 import EcsContainerInstanceWithDefaults from './EcsContainerInstanceWithDefaults';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 
@@ -53,7 +58,7 @@ export default class EcsClusterStack extends Stack {
       {
         securityGroup: securityGroup,
         instanceName: 'EnvvarStandardInstance',
-        userData: customUserData.standardUserData(testCluster.clusterName),
+        userData: standardUserData(testCluster.clusterName),
       }
     );
 
@@ -66,7 +71,7 @@ export default class EcsClusterStack extends Stack {
       {
         securityGroup: securityGroup,
         instanceName: 'EnvvarDockerAuthInstance',
-        userData: customUserData.dockerAuthUserData(testCluster.clusterName, {
+        userData: dockerAuthUserData(testCluster.clusterName, {
           [DOCKER_AUTH_REGISTRY_URI!]: {
             username: DOCKER_AUTH_REGISTRY_USERNAME!,
             password: DOCKER_AUTH_REGISTRY_PASSWORD!,
@@ -86,7 +91,7 @@ export default class EcsClusterStack extends Stack {
         securityGroup: securityGroup,
         instanceName: 'EnvvarCredsInstance',
         role: undefined,
-        userData: customUserData.awsCredsUserData(testCluster.clusterName, {
+        userData: awsCredsUserData(testCluster.clusterName, {
           accessKeyId: AWS_ACCESS_KEY_ID!,
           secretAccessKey: AWS_SECRET_ACCESS_KEY!,
           sessionToken: AWS_SESSION_TOKEN!,
@@ -104,9 +109,7 @@ export default class EcsClusterStack extends Stack {
         securityGroup: securityGroup,
         instanceName: 'EnvvarEniTrunkInstance',
         instanceType: InstanceType.of(InstanceClass.M5, InstanceSize.LARGE),
-        userData: customUserData.highDensityEniUserData(
-          testCluster.clusterName
-        ),
+        userData: highDensityEniUserData(testCluster.clusterName),
       }
     );
   }
