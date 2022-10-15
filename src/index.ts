@@ -5,10 +5,10 @@ import { App } from 'aws-cdk-lib';
 
 dotenv.config();
 
-import EcsClusterStack from './EcsClusterStack';
+import EcsStack from './EcsStack';
 
 const app = new App();
-new EcsClusterStack(app, 'EcsEnvVarExamplesClusterStack', {
+new EcsStack(app, 'EcsEnvVarExamplesStack', {
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,
