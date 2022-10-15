@@ -8,6 +8,7 @@ import {
   Port,
   SecurityGroup,
 } from 'aws-cdk-lib/aws-ec2';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 import {
   standardUserData,
@@ -16,7 +17,7 @@ import {
   highDensityEniUserData,
 } from './util';
 import EcsContainerInstanceWithDefaults from './EcsContainerInstanceWithDefaults';
-import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import CloudwatchLogsOnlyRole from './CloudwatchLogsOnlyRole';
 
 const {
   DOCKER_AUTH_REGISTRY_URI,
@@ -42,6 +43,11 @@ export default class EcsClusterStack extends Stack {
 
     securityGroup.addIngressRule(Peer.ipv4('0.0.0.0/0'), Port.tcp(80));
     securityGroup.addIngressRule(Peer.ipv4('0.0.0.0/0'), Port.tcp(22));
+
+    const cloudwatchLogsOnlyRole = new CloudwatchLogsOnlyRole(
+      scope,
+      'EnvvarExamplesCloudwatchLogsOnlyRole'
+    );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const logGroup = new LogGroup(this, 'EnvvarExamplesInstanceLogsGroup', {
@@ -96,6 +102,7 @@ export default class EcsClusterStack extends Stack {
           secretAccessKey: AWS_SECRET_ACCESS_KEY!,
           sessionToken: AWS_SESSION_TOKEN!,
         }),
+        cwAgentRole: cloudwatchLogsOnlyRole,
       }
     );
 
