@@ -16,7 +16,7 @@ import {
 } from 'aws-cdk-lib/aws-ecs';
 import { Role } from 'aws-cdk-lib/aws-iam';
 
-import buildCloudWatchCfnInitConfig from './CloudwatchAgentCfnInitConfig';
+import buildCloudWatchCfnInitConfig from './cloudwatchAgentCfnInitConfig';
 
 export default class EcsContainerInstanceWithDefaults extends Instance {
   constructor(
