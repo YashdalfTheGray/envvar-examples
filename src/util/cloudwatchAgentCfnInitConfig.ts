@@ -6,7 +6,7 @@ import {
   InitFile,
 } from 'aws-cdk-lib/aws-ec2';
 
-export default function buildCloudWatchCfnInitConfig(
+export function buildCloudWatchCfnInitConfig(
   _instanceName: string,
   logGroupName: string
 ) {
