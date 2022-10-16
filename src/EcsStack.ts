@@ -15,9 +15,11 @@ import {
   dockerAuthUserData,
   awsCredsUserData,
   highDensityEniUserData,
+  getNginxContainer,
 } from './util';
 import EcsContainerInstanceWithDefaults from './EcsContainerInstanceWithDefaults';
 import CloudwatchLogsOnlyRole from './CloudwatchLogsOnlyRole';
+import TaskDefinitionWithDefaults from './TaskDefinitionWithDefaults';
 
 const {
   DOCKER_AUTH_REGISTRY_URI,
@@ -54,6 +56,14 @@ export default class EcsClusterStack extends Stack {
       logGroupName: 'envvar-examples-logs',
       retention: RetentionDays.THREE_DAYS,
     });
+
+    const nginxTaskDef = new TaskDefinitionWithDefaults(
+      scope,
+      'NginxTaskDefWithLogs',
+      { family: 'nginx-taskdef-with-logs' }
+    );
+
+    nginxTaskDef.addContainer('NginxWebContainer', getNginxContainer(logGroup));
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const standardInstance = new EcsContainerInstanceWithDefaults(
