@@ -5,12 +5,15 @@ import {
   TaskDefinitionProps,
 } from 'aws-cdk-lib/aws-ecs';
 import { Role } from 'aws-cdk-lib/aws-iam';
+import { ILogGroup } from 'aws-cdk-lib/aws-logs';
+
+import { getNginxContainer } from './util';
 
 export default class TaskDefinitionWithDefaults extends TaskDefinition {
   constructor(
     scope: Construct,
     id: string,
-    logGroupName: string,
+    logGroup: ILogGroup,
     props: Partial<TaskDefinitionProps>
   ) {
     super(
@@ -33,5 +36,7 @@ export default class TaskDefinitionWithDefaults extends TaskDefinition {
         props
       )
     );
+
+    this.addContainer('NginxContainer', getNginxContainer(logGroup));
   }
 }
