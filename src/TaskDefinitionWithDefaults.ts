@@ -10,6 +10,7 @@ export default class TaskDefinitionWithDefaults extends TaskDefinition {
   constructor(
     scope: Construct,
     id: string,
+    logGroupName: string,
     props: Partial<TaskDefinitionProps>
   ) {
     super(

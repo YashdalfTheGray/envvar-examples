@@ -50,8 +50,8 @@ export default class EcsClusterStack extends Stack {
     );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const logGroup = new LogGroup(this, 'EnvvarExamplesInstanceLogsGroup', {
-      logGroupName: 'envvar-examples-instance-logs',
+    const logGroup = new LogGroup(this, 'EnvvarExamplesLogsGroup', {
+      logGroupName: 'envvar-examples-logs',
       retention: RetentionDays.THREE_DAYS,
     });
 
