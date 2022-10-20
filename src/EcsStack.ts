@@ -47,8 +47,8 @@ export default class EcsClusterStack extends Stack {
     securityGroup.addIngressRule(Peer.ipv4('0.0.0.0/0'), Port.tcp(22));
 
     const cloudwatchLogsOnlyRole = new CloudwatchLogsOnlyRole(
-      scope,
-      'EnvvarExamplesCloudwatchLogsOnlyRole'
+      this,
+      'EnvvarExamplesWriteLogsOnlyRole'
     );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -58,7 +58,7 @@ export default class EcsClusterStack extends Stack {
     });
 
     const nginxTaskDef = new TaskDefinitionWithDefaults(
-      scope,
+      this,
       'NginxTaskDefWithLogs',
       { family: 'nginx-taskdef-with-logs' }
     );

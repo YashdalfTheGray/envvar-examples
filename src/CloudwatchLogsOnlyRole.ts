@@ -1,5 +1,6 @@
 import { Construct } from 'constructs';
 import {
+  Policy,
   PolicyDocument,
   PolicyStatement,
   Role,
@@ -22,8 +23,11 @@ export default class CloudwatchLogsOnlyRole extends Role {
       ],
     });
 
-    this.attachInlinePolicy({
-      logsWritePolicy,
-    });
+    this.attachInlinePolicy(
+      new Policy(scope, 'CloudWatchWriteLogsOnlyPolicy', {
+        policyName: 'logsWritePolicy',
+        document: logsWritePolicy,
+      })
+    );
   }
 }
