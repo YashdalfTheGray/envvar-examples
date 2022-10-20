@@ -38,6 +38,11 @@ export function buildCloudWatchCfnInitConfig(
           '/tmp/amazon-cloudwatch-agent.json',
           getCwAgentConfigForLogGroup(logGroupName, cwAgentRole)
         ),
+        // write out the envconfig because it keeps going missing
+        InitFile.fromString(
+          '/opt/aws/amazon-cloudwatch-agent/etc/env-config.json',
+          '{}'
+        ),
       ]),
       stopCwAgent: new InitConfig([
         InitCommand.shellCommand(
