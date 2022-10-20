@@ -17,5 +17,6 @@ export function getNginxContainer(
       streamPrefix: 'containers/',
     }),
     containerName: 'nginx-container',
+    memoryReservationMiB: 512,
   };
 }

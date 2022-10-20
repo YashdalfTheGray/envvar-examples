@@ -28,6 +28,8 @@ export default class TaskDefinitionWithDefaults extends TaskDefinition {
             `${props.family || id}TaskExecutionRole`,
             'ecsTaskExecutionRole'
           ),
+          cpu: '1024',
+          memoryMiB: '2048',
         },
         props
       )
