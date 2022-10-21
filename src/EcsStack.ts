@@ -1,5 +1,5 @@
 import { Stack, App, StackProps } from 'aws-cdk-lib';
-import { Cluster } from 'aws-cdk-lib/aws-ecs';
+import { Cluster, Ec2Service, NetworkMode } from 'aws-cdk-lib/aws-ecs';
 import {
   InstanceType,
   InstanceClass,
@@ -60,7 +60,7 @@ export default class EcsClusterStack extends Stack {
     const nginxTaskDef = new TaskDefinitionWithDefaults(
       this,
       'NginxTaskDefWithLogs',
-      { family: 'nginx-taskdef-with-logs' }
+      { family: 'nginx-taskdef-with-logs', networkMode: NetworkMode.AWS_VPC }
     );
 
     nginxTaskDef.addContainer('NginxWebContainer', getNginxContainer(logGroup));
