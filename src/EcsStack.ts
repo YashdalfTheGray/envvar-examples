@@ -129,5 +129,16 @@ export default class EcsClusterStack extends Stack {
         userData: highDensityEniUserData(testCluster.clusterName),
       }
     );
+
+    const envvarService = new Ec2Service(this, 'EnvvarExampleService', {
+      cluster: testCluster,
+      taskDefinition: nginxTaskDef,
+      assignPublicIp: true,
+      daemon: true,
+      securityGroups: [securityGroup],
+      vpcSubnets: {
+        subnets: testCluster.vpc.publicSubnets,
+      },
+    });
   }
 }
