@@ -7,6 +7,7 @@ import {
   Peer,
   Port,
   SecurityGroup,
+  SubnetType,
 } from 'aws-cdk-lib/aws-ec2';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 
@@ -42,6 +43,7 @@ export default class EcsClusterStack extends Stack {
         autoScalingGroupName: 'EnvvarAutoScalingGroup',
         associatePublicIpAddress: true,
         keyName: 'ssh-access',
+        vpcSubnets: { subnetType: SubnetType.PUBLIC },
       },
     });
 
