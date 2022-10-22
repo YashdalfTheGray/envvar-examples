@@ -37,6 +37,12 @@ export default class EcsClusterStack extends Stack {
 
     const testCluster = new Cluster(this, 'EcsCluster', {
       clusterName: 'envvar-example-cluster',
+      capacity: {
+        instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
+        autoScalingGroupName: 'EnvvarAutoScalingGroup',
+        associatePublicIpAddress: true,
+        keyName: 'ssh-access',
+      },
     });
 
     const securityGroup = new SecurityGroup(this, 'EcsSecurityGroup', {
