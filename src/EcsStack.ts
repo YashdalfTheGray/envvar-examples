@@ -130,6 +130,7 @@ export default class EcsClusterStack extends Stack {
       }
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const envvarService = new Ec2Service(this, 'EnvvarExampleService', {
       cluster: testCluster,
       taskDefinition: nginxTaskDef,
