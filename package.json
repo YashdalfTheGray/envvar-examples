@@ -26,7 +26,7 @@
     "aws-cdk-lib": "^2.134.0",
     "constructs": "^10.3.0",
     "dotenv": "^16.4.5",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.3.1",
