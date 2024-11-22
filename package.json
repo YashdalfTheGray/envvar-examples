@@ -23,7 +23,7 @@
   "homepage": "https://github.com/YashdalfTheGray/envvar-examples#readme",
   "dependencies": {
     "aws-cdk": "^2.169.0",
-    "aws-cdk-lib": "^2.167.0",
+    "aws-cdk-lib": "^2.169.0",
     "constructs": "^10.4.2",
     "dotenv": "^16.4.5",
     "typescript": "^5.6.3"
